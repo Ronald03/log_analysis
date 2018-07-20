@@ -1,7 +1,6 @@
 import psycopg2
 
 
-result = ""
 DBNAME = "news"
 
 try:
@@ -17,9 +16,8 @@ connect = db.cursor()
 
 
 def popular_authors(file):
-    output = ""
 
-# Use the global openned connection
+    # Use the global openned connection
     connect.execute("SELECT articles.title, COUNT(log.path) AS views FROM log "
                     "JOIN articles ON log.path like '%' || articles.slug || ''"
                     " GROUP BY articles.title ORDER BY views DESC limit 3;")
@@ -30,7 +28,7 @@ def popular_authors(file):
 
 # This variable will hold the formatted data and ready to be added to the
 # output file
-    output = "\n         The most viewed articles are: \n"
+
     file.write("\t         The most viewed articles are: \n")
 
 # save result from query by fetchinig it to the result variable
@@ -43,7 +41,7 @@ def popular_authors(file):
 
 # Extract title and views and add them to a variable; it is already formatted
 # with spaces and new lines:
-        output += "\n " + i[0] + " -- " + str(i[1]) + " views \n \n"
+
         file.write("\n " + i[0] + " -- " + str(i[1]) + " views \n \n")
 
     popular_articles(file)
@@ -53,19 +51,14 @@ def popular_authors(file):
 
 
 def popular_articles(file):
-    output = ""
     connect.execute("SELECT authors.name, COUNT(authors.name) AS author_count,"
                     " authors.id FROM authors JOIN articles ON authors.id = "
                     "articles.author JOIN log ON log.path LIKE '%' ||"
                     " articles.slug || '' GROUP BY authors.name, authors.id "
                     "ORDER BY authors.id;")
-    output += "\n       The most popular article authors: \n"
     file.write("\t       The most popular article authors: \n")
     result = list(connect.fetchall())
     for j in result:
-
-        # print list(j)
-        output += "\n " + j[0] + " -- " + str(j[1]) + " views \n \n"
         file.write("\n " + j[0] + " -- " + str(j[1]) + " views \n \n")
 
     errors_count(file)
@@ -74,32 +67,30 @@ def popular_articles(file):
 
 
 def errors_count(file):
-    output = ""
+
     connect.execute("SELECT TO_CHAR(time::DATE, 'Mon DD, YYYY'), to_char(ROUND"
                     "(COUNT(status) FILTER (WHERE status != '200 OK')/CAST"
                     "(COUNT(status) AS DECIMAL), 2) * 100, '9.9') AS PERCNT "
                     "FROM log GROUP BY time::DATE ORDER BY PERCNT DESC;")
-    output += "\n       Days with more than 1% of Error: \n"
     file.write("\n       Days with more than 1% of Error: \n")
     result = connect.fetchall()
     for x in result:
         if float(x[1]) > 1:
-            output += "\n - " + x[0] + " -- " + x[1] + "%. \n"
             file.write("\n - " + x[0] + " -- " + x[1] + "%. \n")
             file.write("\n")
-    # return output
 
 
 def main():
 
-    # Hold string variable to hold returned result
-    output_text = ""
-
     # Create file
     out_file = open('art_report.txt', 'a')
 
+    # Pass file to popular_authors variable; all other functions
+    # will be called from whitin each function
     popular_authors(out_file)
 
+    # Close file
     out_file.close()
 
+# execute main function to start the report's creation
 main()
