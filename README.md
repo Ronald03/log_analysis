@@ -1,5 +1,5 @@
 # DB Log Analysis
-This python connects with database and adquires useful information about articles and authors, and finally exports it to a file.
+This python code connects with a database and adquires useful information about articles and authors, and finally exports it to a file.
 
 ## Install
  - Download python from [here](https://www.python.org/)
@@ -13,7 +13,7 @@ This python connects with database and adquires useful information about article
 - The program will create a .txt file on the same directory where the program file is located
 
 ### Notes
-> No VIEWS are needed to run this code, every result has been accomplished with one query 
+> No VIEWS are needed to run this code; every result has been accomplished with one query 
 
 ## License
 This is .....**free to the public!**
