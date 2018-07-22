@@ -2,10 +2,12 @@
 
 import psycopg2
 
-# A function to connect to the DB, it will be invoked on every other function
-
 
 def db_connect():
+
+    """
+    Creates a connection to the Database and return the connection and cursor
+    """
     DBNAME = "news"
     try:
         db = psycopg2.connect(database=DBNAME)
@@ -73,8 +75,6 @@ def popular_authors():
     # Close connection with DB
     db.close()
     return output
-
-# On which days did more than 1% of requests lead to errors?
 
 
 def errors_count():
