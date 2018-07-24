@@ -15,7 +15,7 @@ def db_connect():
 
         # Return tuple, DB connection and cursor
         return db, conn
-    except:
+    except ImportError:
         # If not able to connect throws error
         print("Unable to connect to the database")
 
@@ -123,6 +123,8 @@ def main():
     # Close file
     out_file.close()
 
+
 # execute main function to start the report's creation
+
 if __name__ == '__main__':
     main()
