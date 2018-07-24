@@ -113,7 +113,7 @@ def errors_count():
 def main():
 
     # Create file
-    out_file = open('art_report.txt', 'a')
+    out_file = open('art_report.txt', 'w+')
 
     # Write the returned output from each function into the file
     out_file.write(popular_articles())
